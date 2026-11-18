@@ -1,0 +1,1 @@
+Trigger GitHub Actions for nafi-node-foundation.zip validation.
