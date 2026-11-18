@@ -16,7 +16,7 @@ const TREE: [string, Item[]][] = [
   ['فروش و بازارگاه', [[8, 'فروش و سفارشات', 'market.view', '/orders'], [9, 'بازارگاه و پذیرندگان', 'market.view', '/market'], [10, 'کالا و خدمات', 'market.catalog', '/products'], [11, 'انبار و موجودی', 'market.catalog', '/inventory'], [12, 'خرید و تأمین‌کنندگان', 'purchase.view', '/purchases']]],
   ['اعتبار و لندتک', [[13, 'اعتبار و کیف پول', 'credit.view', '/credit'], [14, 'لندتک و تسهیلات', 'module.14', null], [15, 'اقساط و وصول مطالبات', 'module.15', null], [16, 'پذیرندگان و نمایندگان', 'module.16', null]]],
   ['مشتری و هویت', [[17, 'CRM و مشتریان', 'crm.view', '/crm'], [18, 'ثبت‌نام و احراز هویت', 'registration.view', '/registrations'], [19, 'مدیریت پرونده‌ها', 'module.19', null]]],
-  ['اسناد و قراردادها', [[20, 'زونکن دیجیتال', 'module.20', null], [21, 'OCR و پردازش اسناد', 'module.21', null], [22, 'قراردادها', 'contract.view', '/contracts'], [23, 'دبیرخانه و اتوماسیون', 'module.23', null]]],
+  ['اسناد و قراردادها', [[20, 'زونکن دیجیتال', 'document.view', '/documents'], [21, 'OCR و پردازش اسناد', 'module.21', null], [22, 'قراردادها', 'contract.view', '/contracts'], [23, 'دبیرخانه و اتوماسیون', 'module.23', null]]],
   ['توسعه و امنیت', [[34, 'امنیت و حسابرسی', 'audit.view', '/audit'], [35, 'تنظیمات کلان', 'module.35', null]]],
 ];
 export async function menuFor(db: Db, u: Actor) {
