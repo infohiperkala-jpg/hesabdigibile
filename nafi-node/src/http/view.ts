@@ -12,7 +12,7 @@ export const html = (strs: TemplateStringsArray, ...vals: unknown[]): Raw =>
 type Item = [number, string, string | null, string | null];   // number, title, permission, route (null = not built)
 const TREE: [string, Item[]][] = [
   ['سازمان', [[1, 'داشبورد مدیریت کل', 'dashboard.view', '/'], [2, 'مدیریت سازمان', 'module.2', null], [3, 'شرکت‌ها و زیرمجموعه‌ها', 'company.view', '/companies'], [4, 'برندها و دامنه‌ها', 'brand.view', '/brands'], [5, 'کاربران و دسترسی‌ها', 'user.view', '/users']]],
-  ['مالی', [[6, 'مدیریت مالی و حسابداری', 'accounting.view', '/accounting'], [7, 'خزانه‌داری و بانک', 'module.7', null]]],
+  ['مالی', [[6, 'مدیریت مالی و حسابداری', 'accounting.view', '/accounting'], [7, 'خزانه‌داری و بانک', 'accounting.view', '/treasury']]],
   ['فروش و بازارگاه', [[8, 'فروش و سفارشات', 'market.view', '/orders'], [9, 'بازارگاه و پذیرندگان', 'market.view', '/market'], [10, 'کالا و خدمات', 'market.catalog', '/products'], [11, 'انبار و موجودی', 'market.catalog', '/inventory'], [12, 'خرید و تأمین‌کنندگان', 'module.12', null]]],
   ['اعتبار و لندتک', [[13, 'اعتبار و کیف پول', 'credit.view', '/credit'], [14, 'لندتک و تسهیلات', 'module.14', null], [15, 'اقساط و وصول مطالبات', 'module.15', null], [16, 'پذیرندگان و نمایندگان', 'module.16', null]]],
   ['مشتری و هویت', [[17, 'CRM و مشتریان', 'module.17', null], [18, 'ثبت‌نام و احراز هویت', 'registration.view', '/registrations'], [19, 'مدیریت پرونده‌ها', 'module.19', null]]],
