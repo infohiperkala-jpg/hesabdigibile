@@ -81,6 +81,50 @@ export async function migrate(db: Db): Promise<string[]> {
         CONSTRAINT fk_treasury_to FOREIGN KEY (to_account_id) REFERENCES bank_accounts(id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
     }],
+    ['006_procurement', async () => {
+      await db.exec(`CREATE TABLE suppliers (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        company_id BIGINT UNSIGNED NOT NULL,
+        name VARCHAR(160) NOT NULL,
+        contact_name VARCHAR(120) NULL,
+        phone VARCHAR(30) NULL,
+        email VARCHAR(190) NULL,
+        tax_id VARCHAR(40) NULL,
+        address VARCHAR(500) NULL,
+        status VARCHAR(12) NOT NULL DEFAULT 'active',
+        created_by BIGINT UNSIGNED NOT NULL,
+        created_at DATETIME NOT NULL,
+        KEY ix_suppliers_company (company_id),
+        CONSTRAINT fk_suppliers_company FOREIGN KEY (company_id) REFERENCES companies(id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+      await db.exec(`CREATE TABLE purchase_orders (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        company_id BIGINT UNSIGNED NOT NULL,
+        supplier_id BIGINT UNSIGNED NOT NULL,
+        status VARCHAR(12) NOT NULL DEFAULT 'ordered',
+        total BIGINT NOT NULL,
+        expected_on DATE NULL,
+        note VARCHAR(500) NULL,
+        created_by BIGINT UNSIGNED NOT NULL,
+        created_at DATETIME NOT NULL,
+        received_at DATETIME NULL,
+        KEY ix_purchase_company (company_id,status,created_at),
+        CONSTRAINT fk_purchase_company FOREIGN KEY (company_id) REFERENCES companies(id),
+        CONSTRAINT fk_purchase_supplier FOREIGN KEY (supplier_id) REFERENCES suppliers(id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+      await db.exec(`CREATE TABLE purchase_order_items (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        purchase_order_id BIGINT UNSIGNED NOT NULL,
+        product_id BIGINT UNSIGNED NOT NULL,
+        product_name VARCHAR(200) NOT NULL,
+        qty INT NOT NULL,
+        unit_cost BIGINT NOT NULL,
+        received_qty INT NOT NULL DEFAULT 0,
+        KEY ix_purchase_items_order (purchase_order_id),
+        CONSTRAINT fk_purchase_item_order FOREIGN KEY (purchase_order_id) REFERENCES purchase_orders(id),
+        CONSTRAINT fk_purchase_item_product FOREIGN KEY (product_id) REFERENCES products(id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+    }],
   ];
   for (const [name, run] of steps) {
     if (done.has(name)) continue;
