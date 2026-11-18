@@ -32,6 +32,18 @@ jobs:
           cache: npm
           cache-dependency-path: nafi-node/package-lock.json
 
+      - name: Inspect test database configuration
+        working-directory: nafi-node
+        run: |
+          echo '--- .env.example ---'
+          cat .env.example
+          echo '--- src/core/env.ts ---'
+          sed -n '1,240p' src/core/env.ts
+          echo '--- src/core/db.ts ---'
+          sed -n '1,180p' src/core/db.ts
+          echo '--- tests/helpers.ts ---'
+          sed -n '1,100p' tests/helpers.ts
+
       - name: Install dependencies
         working-directory: nafi-node
         run: npm ci
