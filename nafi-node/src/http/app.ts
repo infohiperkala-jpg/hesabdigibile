@@ -21,6 +21,7 @@ import { handleAccounting, handleCredit } from './finance.js';
 import { handleEditPages } from './edit-pages.js';
 import { handleRegistration } from './registration-pages.js';
 import { handleMarketplace } from './marketplace.js';
+import { handleOrders } from './orders.js';
 import { parseMultipart } from './multipart.js';
 
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public', 'app.css'));
