@@ -22,6 +22,7 @@ import { handleEditPages } from './edit-pages.js';
 import { handleRegistration } from './registration-pages.js';
 import { handleMarketplace } from './marketplace.js';
 import { handleOrders } from './orders.js';
+import { handleTreasury } from './treasury.js';
 import { parseMultipart } from './multipart.js';
 
 const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public', 'app.css'));
@@ -135,7 +136,7 @@ export function makeHandler(db: Db) {
         return render('حساب من', html`<div class="panel"><h2>احراز هویت دومرحله‌ای (MFA)</h2>${mfaBox}</div><form method="post" action="/account/password" class="panel form" autocomplete="off"><h2>تغییر گذرواژه</h2>${csrf}<label>گذرواژه فعلی<input type="password" name="current" required autocomplete="current-password"></label><label>گذرواژه جدید (حداقل ۱۰ کاراکتر، حرف و عدد)<input type="password" name="new" required minlength="10" autocomplete="new-password"></label><button>تغییر گذرواژه</button></form>`);
       }
       const ctx: Ctx = { db, A, u, rq, csrf, f, render, done, redirect: (to) => redirect(to), flashErr: (m) => S.setFlash(db, sess, m, 'err') as Promise<any>, flashOk: (m) => S.setFlash(db, sess, m) as Promise<any> };
-      for (const h of [handleRegistration, handleEditPages, handleAccounting, handleCredit, handleMarketplace, handleOrders]) { const r = await h(ctx); if (r) return r; }
+      for (const h of [handleRegistration, handleEditPages, handleAccounting, handleCredit, handleMarketplace, handleOrders, handleTreasury]) { const r = await h(ctx); if (r) return r; }
       throw new HttpError('صفحه مورد نظر یافت نشد.', 404);
     };
     try { const r = await out(); return { ...r, cookie: setTok ? setCookie(setTok, rq.secure) : undefined }; }
