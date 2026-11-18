@@ -21,7 +21,7 @@ class Browser {
 beforeAll(async () => {
   process.env.MFA_REQUIRED = '0'; process.env.VAULT_PATH = '/tmp/nafi-vault-http-' + Math.random().toString(36).slice(2); ({ db, drop } = await freshDb()); h = makeHandler(db);
   const owner = await makeOwner(db); cA = await org.createCompany(db, owner, 'شرکت الف');
-  await makeUser(db, owner, 'registrar', 'reg@t.test', cA); await makeUser(db, owner, 'doc_expert', 'exp@t.test', cA);
+  await makeUser(db, owner, 'registrar', 'reg@t.test', cA); await makeUser(db, owner, 'doc_expert', 'exp@t.test', cA); await makeUser(db, owner, 'viewer', 'viewer@t.test', cA);
 });
 afterAll(async () => { await drop(); rmSync(process.env.VAULT_PATH!, { recursive: true, force: true }); });
 
@@ -66,7 +66,7 @@ describe('registration through HTTP', () => {
     const r = await reg.req('GET', '/documents');
     expect(r.status).toBe(200); expect(r.body).toContain('زونکن دیجیتال'); expect(r.body).toContain('F-'); expect(r.body).toContain('front.png'); expect(r.body).toContain('شناسه پرونده');
     const e = await exp.req('GET', '/documents'); expect(e.status).toBe(200); expect(e.body).toContain('front.png');
-    const no = await new Browser().login('owner@t.test', 'Owner-pass-1');
+    const no = await new Browser().login('viewer@t.test', 'Strong-pass-123');
     expect((await no.req('GET', '/documents')).status).toBe(403);
   });
   it('history panels show who changed what, with reasons', async () => {
