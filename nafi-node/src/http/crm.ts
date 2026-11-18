@@ -12,7 +12,7 @@ async function company(c: Ctx) {
   if(!cid||!(await c.db.val('SELECT 1 FROM companies WHERE id=?',[cid]))) throw new HttpError('شرکت انتخاب‌شده معتبر نیست.',404);
   return {cid,hidden:group?html`<input type="hidden" name="c" value="${cid}">`:html` `,url:(p:string)=>p+(group?`?c=${cid}`:'')};
 }
-const validDate=(s:string)=>/^\\d{4}-\\d{2}-\\d{2}$/.test(s)&&!Number.isNaN(Date.parse(s+'T00:00:00Z'));
+const validDate=(s:string)=>/^\d{4}-\d{2}-\d{2}$/.test(s)&&!Number.isNaN(Date.parse(s+'T00:00:00Z'));
 const stages:Record<string,string>={lead:'سرنخ',customer:'مشتری',inactive:'غیرفعال'};
 
 export async function handleCrm(c:Ctx):Promise<Out|null>{
@@ -24,7 +24,7 @@ export async function handleCrm(c:Ctx):Promise<Out|null>{
  if(rq.method==='POST'&&rq.path==='/crm/customers'){
   if(!manage) throw new HttpError('دسترسی ثبت مشتری ندارید.',403);
   const name=c.f('name').trim(),phone=c.f('phone').trim(),email=c.f('email').trim(),kind=c.f('kind'),companyName=c.f('company_name').trim(),note=c.f('note').trim();
-  if(name.length<2||name.length>160||phone.length>30||email.length>190||companyName.length>160||note.length>1000||!['lead','customer'].includes(kind)||(email&&!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))) throw new Invalid('اطلاعات مشتری معتبر نیست.');
+  if(name.length<2||name.length>160||phone.length>30||email.length>190||companyName.length>160||note.length>1000||!['lead','customer'].includes(kind)||(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))) throw new Invalid('اطلاعات مشتری معتبر نیست.');
   return c.done(back,()=>db.tx(async t=>{
    const id=await t.insert('INSERT INTO crm_customers(company_id,name,company_name,phone,email,stage,note,created_by,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?)',[cid,name,companyName||null,phone||null,email||null,kind,note||null,A.id,db.now(),db.now()]);
    await audit.log(t,A,'crm.customer.create','crm_customer',id,{name,stage:kind},cid);
@@ -41,7 +41,7 @@ export async function handleCrm(c:Ctx):Promise<Out|null>{
    await audit.log(t,A,'crm.activity.create','crm_activity',id,{customer_id:customer,kind,due_on:due||null},cid);
   }),'پیگیری مشتری ثبت شد.');
  }
- const doneMatch=rq.path.match(/^\\/crm\\/activities\\/(\\d+)\\/complete$/);
+ const doneMatch=rq.path.match(/^\/crm\/activities\/(\d+)\/complete$/);
  if(rq.method==='POST'&&doneMatch){
   if(!manage) throw new HttpError('دسترسی بستن پیگیری ندارید.',403);
   const id=Number(doneMatch[1]);
