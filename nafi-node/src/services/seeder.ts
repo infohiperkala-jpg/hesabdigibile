@@ -4,7 +4,7 @@ import * as audit from '../core/audit.js';
 export const PERMS: Record<string, string> = {
   'dashboard.view': 'مشاهده داشبورد', 'company.view': 'مشاهده شرکت‌ها', 'company.manage': 'مدیریت شرکت‌ها', 'brand.view': 'مشاهده برندها و دامنه‌ها', 'brand.manage': 'مدیریت برندها و دامنه‌ها',
   'user.view': 'مشاهده کاربران', 'user.manage': 'مدیریت کاربران', 'role.view': 'مشاهده نقش‌ها', 'audit.view': 'مشاهده گزارش حسابرسی',
-  'registration.view': 'مشاهده پرونده‌های ثبت‌نام', 'registration.manage': 'ثبت‌نام و بارگذاری مدارک', 'registration.review': 'بررسی و تأیید مدارک', 'document.download': 'دانلود مدارک',
+  'registration.view': 'مشاهده پرونده‌های ثبت‌نام', 'registration.manage': 'ثبت‌نام و بارگذاری مدارک', 'registration.review': 'بررسی و تأیید مدارک', 'document.view': 'مشاهده زونکن دیجیتال', 'document.download': 'دانلود مدارک',
   'accounting.view': 'مشاهده حسابداری و گزارش‌ها', 'accounting.manage': 'مدیریت سرفصل‌ها و دوره مالی', 'accounting.entry': 'ثبت و برگشت سند حسابداری', 'accounting.finalize': 'قطعی‌کردن سند حسابداری',
   'credit.view': 'مشاهده اعتبار و اقساط', 'credit.manage': 'تعریف طرح‌های اعتباری', 'credit.entry': 'ثبت پیش‌فاکتور و درخواست اعتبار', 'credit.review': 'تصمیم‌گیری درخواست اعتبار', 'credit.payment': 'ثبت پرداخت اقساط',
   'market.view': 'مشاهده بازارگاه', 'market.manage': 'مدیریت پذیرندگان', 'market.catalog': 'مدیریت کاتالوگ کالا', 'market.sell': 'ثبت سفارش', 'market.settle': 'تسویه با پذیرندگان', 'purchase.view': 'مشاهده خرید و تأمین‌کنندگان', 'purchase.manage': 'مدیریت تأمین‌کنندگان و سفارش خرید', 'purchase.receive': 'ثبت رسید خرید', 'crm.view': 'مشاهده CRM و مشتریان', 'crm.manage': 'مدیریت مشتریان و پیگیری‌ها',
@@ -14,8 +14,8 @@ const ALL = Object.keys(PERMS);
 export const ROLES: Record<string, [string, string[]]> = {
   company_admin: ['مدیر شرکت', ALL.filter(p => p !== 'company.manage')],
   viewer: ['مشاهده‌گر', ['dashboard.view', 'company.view', 'brand.view']],
-  registrar: ['کارمند ثبت‌نام', ['dashboard.view', 'registration.view', 'registration.manage']],
-  doc_expert: ['کارشناس مدارک', ['dashboard.view', 'registration.view', 'registration.review', 'document.download']],
+  registrar: ['کارمند ثبت‌نام', ['dashboard.view', 'registration.view', 'registration.manage', 'document.view']],
+  doc_expert: ['کارشناس مدارک', ['dashboard.view', 'registration.view', 'registration.review', 'document.view', 'document.download']],
   accountant: ['کارشناس حسابداری', ['dashboard.view', 'accounting.view', 'accounting.entry']],
   fin_manager: ['مدیر مالی', ['dashboard.view', 'accounting.view', 'accounting.manage', 'accounting.finalize']],
   credit_officer: ['کارشناس اعتبار', ['dashboard.view', 'registration.view', 'credit.view', 'credit.entry', 'credit.payment']],
