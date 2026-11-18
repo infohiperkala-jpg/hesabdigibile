@@ -4,7 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "vitest run",
+    "test": "node --env-file-if-exists=.env ./node_modules/vitest/vitest.mjs run",
     "typecheck": "tsc --noEmit", "start": "tsx --env-file-if-exists=.env src/bin/serve.ts",
     "migrate": "tsx --env-file-if-exists=.env src/bin/migrate.ts",
     "install-app": "tsx --env-file-if-exists=.env src/bin/install.ts"
