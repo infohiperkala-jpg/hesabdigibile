@@ -7,7 +7,7 @@ export const PERMS: Record<string, string> = {
   'registration.view': 'مشاهده پرونده‌های ثبت‌نام', 'registration.manage': 'ثبت‌نام و بارگذاری مدارک', 'registration.review': 'بررسی و تأیید مدارک', 'document.download': 'دانلود مدارک',
   'accounting.view': 'مشاهده حسابداری و گزارش‌ها', 'accounting.manage': 'مدیریت سرفصل‌ها و دوره مالی', 'accounting.entry': 'ثبت و برگشت سند حسابداری', 'accounting.finalize': 'قطعی‌کردن سند حسابداری',
   'credit.view': 'مشاهده اعتبار و اقساط', 'credit.manage': 'تعریف طرح‌های اعتباری', 'credit.entry': 'ثبت پیش‌فاکتور و درخواست اعتبار', 'credit.review': 'تصمیم‌گیری درخواست اعتبار', 'credit.payment': 'ثبت پرداخت اقساط',
-  'market.view': 'مشاهده بازارگاه', 'market.manage': 'مدیریت پذیرندگان', 'market.catalog': 'مدیریت کاتالوگ کالا', 'market.sell': 'ثبت سفارش', 'market.settle': 'تسویه با پذیرندگان', 'purchase.view': 'مشاهده خرید و تأمین‌کنندگان', 'purchase.manage': 'مدیریت تأمین‌کنندگان و سفارش خرید', 'purchase.receive': 'ثبت رسید خرید',
+  'market.view': 'مشاهده بازارگاه', 'market.manage': 'مدیریت پذیرندگان', 'market.catalog': 'مدیریت کاتالوگ کالا', 'market.sell': 'ثبت سفارش', 'market.settle': 'تسویه با پذیرندگان', 'purchase.view': 'مشاهده خرید و تأمین‌کنندگان', 'purchase.manage': 'مدیریت تأمین‌کنندگان و سفارش خرید', 'purchase.receive': 'ثبت رسید خرید', 'crm.view': 'مشاهده CRM و مشتریان', 'crm.manage': 'مدیریت مشتریان و پیگیری‌ها',
   'contract.view': 'مشاهده قراردادها', 'contract.manage': 'مدیریت قالب‌های قرارداد', 'contract.draft': 'تنظیم و امضای قرارداد', 'contract.approve': 'تأیید و فسخ قرارداد',
 };
 const ALL = Object.keys(PERMS);
@@ -21,7 +21,7 @@ export const ROLES: Record<string, [string, string[]]> = {
   credit_officer: ['کارشناس اعتبار', ['dashboard.view', 'registration.view', 'credit.view', 'credit.entry', 'credit.payment']],
   credit_manager: ['مدیر اعتبار', ['dashboard.view', 'registration.view', 'credit.view', 'credit.manage', 'credit.review']],
   market_manager: ['مدیر بازارگاه', ['dashboard.view', 'market.view', 'market.manage', 'market.catalog', 'market.settle']],
-  sales_agent: ['کارشناس فروش', ['dashboard.view', 'registration.view', 'credit.view', 'credit.entry', 'market.view', 'market.sell']],
+  sales_agent: ['کارشناس فروش', ['dashboard.view', 'registration.view', 'credit.view', 'credit.entry', 'market.view', 'market.sell', 'crm.view', 'crm.manage']],
   contract_officer: ['کارشناس قراردادها', ['dashboard.view', 'registration.view', 'contract.view', 'contract.draft']],
   legal_manager: ['مدیر حقوقی', ['dashboard.view', 'registration.view', 'document.download', 'contract.view', 'contract.manage', 'contract.approve']],
 };
