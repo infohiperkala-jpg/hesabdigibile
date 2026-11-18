@@ -62,6 +62,13 @@ describe('registration through HTTP', () => {
     await exp.post(`${page}/correct-nid`, { national_id: '0013542419', note: 'اشتباه تایپی هنگام ثبت اولیه' }, page); expect(await db.val('SELECT status FROM document_ocr_results WHERE id = 1')).toBe('superseded'); expect(await db.val('SELECT status FROM identity_profiles WHERE id = ?', [id])).toBe('awaiting_review');
     await reg.post(`${page}/remove`, { file_id: '1', note: '' }, page); expect(await db.val('SELECT processing_state FROM document_files WHERE id = 1')).not.toBe('removed');
   });
+  it('digital vault lists company documents, folder metadata and restricts the page by permission', async () => {
+    const r = await reg.req('GET', '/documents');
+    expect(r.status).toBe(200); expect(r.body).toContain('زونکن دیجیتال'); expect(r.body).toContain('F-'); expect(r.body).toContain('front.png'); expect(r.body).toContain('شناسه پرونده');
+    const e = await exp.req('GET', '/documents'); expect(e.status).toBe(200); expect(e.body).toContain('front.png');
+    const no = await new Browser().login('owner@t.test', 'Owner-pass-1');
+    expect((await no.req('GET', '/documents')).status).toBe(403);
+  });
   it('history panels show who changed what, with reasons', async () => {
     const p = (await exp.req('GET', page)).body; expect(p).toContain('اشتباه تایپی هنگام ثبت اولیه'); expect(p).toContain('تاریخچه تغییرات'); expect(p).toContain('تاریخچه وضعیت'); expect(p).not.toContain('0013542419\n');
     expect(p).toContain('09123456789');   // old mobile is in the change history
