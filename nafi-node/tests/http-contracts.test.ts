@@ -18,7 +18,7 @@ class Browser {
   async login() { await this.req('GET','/login'); await this.req('POST','/login',{email:'owner@t.test',password:'Owner-pass-1',_csrf:this.csrf()}); return this; }
   async post(path:string, form:Record<string,string>={}, from='/contracts') { await this.req('GET',from); return this.req('POST',path,{...form,_csrf:this.csrf()}); }
 }
-const location = (r:{headers?:Record<string,string>}) => r.headers?.Location;
+const location = (r:{headers?:Record<string,string>}) => { const value=r.headers?.Location; return value ? new URL(value,'http://x').pathname : undefined; };
 
 beforeAll(async()=>{
   process.env.MFA_REQUIRED='0';
