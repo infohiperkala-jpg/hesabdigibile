@@ -16,7 +16,7 @@ class Browser {
   }
   csrf() { return this.last.match(/name="_csrf" value="([a-f0-9]+)"/)?.[1] ?? ''; }
   async login() { await this.req('GET','/login'); const r=await this.req('POST','/login',{email:'owner@t.test',password:'Owner-pass-1',_csrf:this.csrf()}); expect(r.status, 'login response: '+r.body).toBe(303); expect(r.headers?.Location).toBe('/'); return this; }
-  async post(path:string, form:Record<string,string>={}, from='/contracts') { await this.req('GET',from); return this.req('POST',path,{...form,_csrf:this.csrf()}); }
+  async post(path:string, form:Record<string,string>={}, from='/contracts') { const page=await this.req('GET',from); expect(page.status, 'preflight '+page.status+' '+(page.headers?.Location??'')+' '+page.body).toBe(200); expect(this.csrf()).toHaveLength(64); return this.req('POST',path,{...form,_csrf:this.csrf()}); }
 }
 const location = (r:{headers?:Record<string,string>}) => { const value=r.headers?.Location; return value ? new URL(value,'http://x').pathname : undefined; };
 
