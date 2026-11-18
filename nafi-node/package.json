@@ -1,0 +1,25 @@
+{
+  "name": "nafi-platform",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit", "start": "tsx --env-file-if-exists=.env src/bin/serve.ts",
+    "migrate": "tsx --env-file-if-exists=.env src/bin/migrate.ts",
+    "install-app": "tsx --env-file-if-exists=.env src/bin/install.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.2.2",
+    "mysql2": "^3.24.6"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^5.1.0"
+  }
+}
