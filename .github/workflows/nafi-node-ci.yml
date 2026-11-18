@@ -14,6 +14,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root-test-password
+          MYSQL_DATABASE: mysql
+          MYSQL_USER: nafi
+          MYSQL_PASSWORD: nafi-test-pass
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -unaﬁ -pnafi-test-pass"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -32,17 +47,15 @@ jobs:
           cache: npm
           cache-dependency-path: nafi-node/package-lock.json
 
-      - name: Inspect test database configuration
-        working-directory: nafi-node
+      - name: Wait for MySQL and grant test database permissions
         run: |
-          echo '--- .env.example ---'
-          cat .env.example
-          echo '--- src/core/env.ts ---'
-          sed -n '1,240p' src/core/env.ts
-          echo '--- src/core/db.ts ---'
-          sed -n '1,180p' src/core/db.ts
-          echo '--- tests/helpers.ts ---'
-          sed -n '1,100p' tests/helpers.ts
+          for i in {1..30}; do
+            if mysqladmin ping -h 127.0.0.1 -uroot -proot-test-password --silent; then
+              break
+            fi
+            sleep 2
+          done
+          mysql -h 127.0.0.1 -uroot -proot-test-password -e "GRANT ALL PRIVILEGES ON *.* TO 'nafi'@'%'; FLUSH PRIVILEGES;"
 
       - name: Install dependencies
         working-directory: nafi-node
@@ -50,6 +63,13 @@ jobs:
 
       - name: Run tests
         working-directory: nafi-node
+        env:
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_NAME: nafi
+          DB_USER: nafi
+          DB_PASS: nafi-test-pass
+          APP_KEY: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
         run: npm test -- --run
 
       - name: Build
