@@ -125,6 +125,41 @@ export async function migrate(db: Db): Promise<string[]> {
         CONSTRAINT fk_purchase_item_product FOREIGN KEY (product_id) REFERENCES products(id)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
     }],
+    ['007_crm', async () => {
+      await db.exec(`CREATE TABLE crm_customers (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        company_id BIGINT UNSIGNED NOT NULL,
+        name VARCHAR(160) NOT NULL,
+        company_name VARCHAR(160) NULL,
+        phone VARCHAR(30) NULL,
+        email VARCHAR(190) NULL,
+        stage VARCHAR(12) NOT NULL DEFAULT 'lead',
+        note VARCHAR(1000) NULL,
+        created_by BIGINT UNSIGNED NOT NULL,
+        created_at DATETIME NOT NULL,
+        updated_at DATETIME NOT NULL,
+        KEY ix_crm_customer_company (company_id,stage,name),
+        KEY ix_crm_customer_phone (company_id,phone),
+        CONSTRAINT fk_crm_customer_company FOREIGN KEY (company_id) REFERENCES companies(id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+      await db.exec(`CREATE TABLE crm_activities (
+        id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        company_id BIGINT UNSIGNED NOT NULL,
+        customer_id BIGINT UNSIGNED NOT NULL,
+        kind VARCHAR(12) NOT NULL,
+        subject VARCHAR(180) NOT NULL,
+        body VARCHAR(1500) NULL,
+        due_on DATE NULL,
+        status VARCHAR(10) NOT NULL DEFAULT 'open',
+        created_by BIGINT UNSIGNED NOT NULL,
+        created_at DATETIME NOT NULL,
+        completed_at DATETIME NULL,
+        KEY ix_crm_activity_company_due (company_id,status,due_on),
+        KEY ix_crm_activity_customer (customer_id),
+        CONSTRAINT fk_crm_activity_company FOREIGN KEY (company_id) REFERENCES companies(id),
+        CONSTRAINT fk_crm_activity_customer FOREIGN KEY (customer_id) REFERENCES crm_customers(id)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4`);
+    }],
   ];
   for (const [name, run] of steps) {
     if (done.has(name)) continue;
