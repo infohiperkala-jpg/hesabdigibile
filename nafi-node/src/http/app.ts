@@ -29,7 +29,9 @@ import { handleContracts } from './contracts.js';
 import { handleDocuments } from './documents.js';
 import { parseMultipart } from './multipart.js';
 
-const css = readFileSync(join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public', 'app.css'));
+const publicDir = join(dirname(fileURLToPath(import.meta.url)), '..', '..', 'public');
+const css = readFileSync(join(publicDir, 'app.css'));
+const clientJs = readFileSync(join(publicDir, 'app.js'));
 const redirect = (to: string, cookie?: string): Out => ({ status: 303, body: '', headers: { Location: to, ...(cookie ? { 'Set-Cookie': cookie } : {}) } });
 const page = (b: string, status = 200): Out => ({ status, body: b });
 const cookieOf = (name: string, h?: string) => h?.split(';').map(c => c.trim().split('=')).find(([k]) => k === name)?.[1];
@@ -154,8 +156,9 @@ export function makeHandler(db: Db) {
 export function startServer(db: Db, port: number, host = '127.0.0.1') {
   const handle = makeHandler(db);
   return createServer(async (req: IncomingMessage, res: ServerResponse) => {
-    const url = new URL(req.url ?? '/', 'http://x'); const sec = { 'Content-Security-Policy': "default-src 'self'; style-src 'self'; script-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'", 'X-Frame-Options': 'DENY', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin', 'Cache-Control': 'no-store' };
+    const url = new URL(req.url ?? '/', 'http://x'); const sec = { 'Content-Security-Policy': "default-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'", 'X-Frame-Options': 'DENY', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin', 'Cache-Control': 'no-store' };
     if (url.pathname === '/assets/app.css') { res.writeHead(200, { 'Content-Type': 'text/css; charset=utf-8', 'X-Content-Type-Options': 'nosniff' }); return void res.end(css); }
+    if (url.pathname === '/assets/app.js') { res.writeHead(200, { 'Content-Type': 'text/javascript; charset=utf-8', 'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'public, max-age=300' }); return void res.end(clientJs); }
     const chunks: Buffer[] = []; let size = 0; const ct = String(req.headers['content-type'] ?? '');
     if (req.method === 'POST') { for await (const c of req) { size += c.length; if (size > (ct.startsWith('multipart/') ? 9_500_000 : 200_000)) { res.writeHead(413); return void res.end(); } chunks.push(c); } }
     const raw = Buffer.concat(chunks); let form: URLSearchParams, files: any[] | undefined;
