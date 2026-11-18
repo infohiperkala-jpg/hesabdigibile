@@ -15,7 +15,7 @@ class Browser {
     this.last = r.body; return r;
   }
   csrf() { return this.last.match(/name="_csrf" value="([a-f0-9]+)"/)?.[1] ?? ''; }
-  async login() { await this.req('GET','/login'); await this.req('POST','/login',{email:'owner@t.test',password:'Owner-pass-1',_csrf:this.csrf()}); return this; }
+  async login() { await this.req('GET','/login'); const r=await this.req('POST','/login',{email:'owner@t.test',password:'Owner-pass-1',_csrf:this.csrf()}); expect(r.status, 'login response: '+r.body).toBe(303); expect(r.headers?.Location).toBe('/'); return this; }
   async post(path:string, form:Record<string,string>={}, from='/contracts') { await this.req('GET',from); return this.req('POST',path,{...form,_csrf:this.csrf()}); }
 }
 const location = (r:{headers?:Record<string,string>}) => { const value=r.headers?.Location; return value ? new URL(value,'http://x').pathname : undefined; };
@@ -35,7 +35,7 @@ describe('contracts through HTTP',()=>{
       body:'متن اولیه قرارداد شامل تمام شرایط و تعهدات طرفین است.',
       amount:'125000000',starts_on:'2026-01-01',ends_on:'2026-12-29'
     });
-    expect(location(create)).toBe('/contracts');
+    expect(create.status, 'create response: '+create.body).toBe(303); expect(location(create)).toBe('/contracts');
     let row=await db.one('SELECT id,current_version FROM contracts WHERE number=?',['CN-1405-001']);
     expect(row).toBeTruthy(); const id=Number(row!.id);
     const first=await db.one('SELECT body_hash FROM contract_versions WHERE contract_id=? AND version=1',[id]);
