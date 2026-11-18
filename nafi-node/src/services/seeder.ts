@@ -7,7 +7,7 @@ export const PERMS: Record<string, string> = {
   'registration.view': 'مشاهده پرونده‌های ثبت‌نام', 'registration.manage': 'ثبت‌نام و بارگذاری مدارک', 'registration.review': 'بررسی و تأیید مدارک', 'document.download': 'دانلود مدارک',
   'accounting.view': 'مشاهده حسابداری و گزارش‌ها', 'accounting.manage': 'مدیریت سرفصل‌ها و دوره مالی', 'accounting.entry': 'ثبت و برگشت سند حسابداری', 'accounting.finalize': 'قطعی‌کردن سند حسابداری',
   'credit.view': 'مشاهده اعتبار و اقساط', 'credit.manage': 'تعریف طرح‌های اعتباری', 'credit.entry': 'ثبت پیش‌فاکتور و درخواست اعتبار', 'credit.review': 'تصمیم‌گیری درخواست اعتبار', 'credit.payment': 'ثبت پرداخت اقساط',
-  'market.view': 'مشاهده بازارگاه', 'market.manage': 'مدیریت پذیرندگان', 'market.catalog': 'مدیریت کاتالوگ کالا', 'market.sell': 'ثبت سفارش', 'market.settle': 'تسویه با پذیرندگان',
+  'market.view': 'مشاهده بازارگاه', 'market.manage': 'مدیریت پذیرندگان', 'market.catalog': 'مدیریت کاتالوگ کالا', 'market.sell': 'ثبت سفارش', 'market.settle': 'تسویه با پذیرندگان', 'purchase.view': 'مشاهده خرید و تأمین‌کنندگان', 'purchase.manage': 'مدیریت تأمین‌کنندگان و سفارش خرید', 'purchase.receive': 'ثبت رسید خرید',
   'contract.view': 'مشاهده قراردادها', 'contract.manage': 'مدیریت قالب‌های قرارداد', 'contract.draft': 'تنظیم و امضای قرارداد', 'contract.approve': 'تأیید و فسخ قرارداد',
 };
 const ALL = Object.keys(PERMS);
